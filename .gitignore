@@ -1,0 +1,13 @@
+# Created by .ignore support plugin (hsz.mobi)
+.env
+.idea
+www/*
+nginx/conf/conf.d/*
+nginx/logs/*
+php/logs/*
+php/logs1/*
+redis/data/*
+redis/logs/*
+mysql/data/*
+mysql/log/*
+go/logs/*

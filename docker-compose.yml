@@ -1,0 +1,163 @@
+version: '3'
+
+services:
+
+  zookeeper:
+    image: confluentinc/cp-zookeeper
+    #    image: wurstmeister/zookeeper
+    container_name: zookeeper
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+    ports:
+      - "2181:2181"
+    networks:
+      - lnmp
+
+  kafka:
+    image: confluentinc/cp-kafka
+    container_name: kafka
+    depends_on:
+      - zookeeper
+    ports:  # 增加
+      - 9092:9092  # 增加
+    environment:
+      KAFKA_BROKER_NO: 1
+      KAFKA_ADVERTISED_HOST_NAME: 192.168.0.103
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://192.168.0.103:9092
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_HEAP_OPTS: "-Xmx512M -Xms16M"
+    networks:
+      - lnmp
+
+  es:
+    image: elasticsearch:6.4.3
+    container_name: es
+    environment:
+      LC_ALL: en_US.UTF-8
+    ports:
+      - 9200:9200
+      - 9300:9300
+    networks:
+      - lnmp
+
+  mysql:
+    image: mysql:5.7
+    container_name: mysql
+    restart: always
+    command:
+      --character-set-server=utf8mb4
+      --collation-server=utf8mb4_general_ci
+      --explicit_defaults_for_timestamp=true
+      --lower_case_table_names=1
+      --max_allowed_packet=128M
+      --sql-mode="STRICT_TRANS_TABLES,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION,NO_ZERO_DATE,NO_ZERO_IN_DATE,ERROR_FOR_DIVISION_BY_ZERO"
+    environment:
+      TZ: Asia/Shanghai
+      MYSQL_ROOT_PASSWORD: 123456
+      MYSQL_ROOT_HOST: 172.*.*.*
+    ports:
+      - 3306:3306
+    volumes:
+      - ${DOCKER_ENV}${MYSQL_DATA}:/var/lib/mysql
+      - ${DOCKER_ENV}${MYSQL_CONF}:/etc/mysql/conf.d
+      - ${DOCKER_ENV}${MYSQL_LOG}:/home/logs
+    networks:
+      - lnmp
+
+  redis:
+    image: redis:5.0
+    container_name: redis
+    command: redis-server /usr/local/etc/redis/redis.conf
+    restart: always
+    ports:
+      - "${REDIS_PORT}:6379"
+    volumes:
+      - ${DOCKER_ENV}${REDIS_CONF}:/usr/local/etc/redis/redis.conf
+      - ${DOCKER_ENV}${REDIS_DATA}:/data
+      - ${DOCKER_ENV}${REDIS_LOGS}:/var/log
+    expose:
+      - 6379
+    environment:
+      LC_ALL: en_US.UTF-8
+    networks:
+      - lnmp
+
+  php:
+    #    build:
+    #      context: ./Php
+    image: 18736050080/myphp:v4
+    container_name: php
+    restart: always
+    ports:
+      - "${HTTP_SWOOLE_PORT}:9577"
+    volumes:
+      - ${DOCKER_ENV}${WORK_DIR}:/data/www
+      - ${DOCKER_ENV}${PHP_LOG_DIR}:/var/opt/remi/php73/log
+      - ${DOCKER_ENV}${PHP_WWW_LOG_DIR}:/home/logs
+      - ${HOME_DIR}.ssh:/root/ssh_key
+      - ${SSH_KEY}:/root/ssh.sh
+    working_dir: /data/www
+    environment:
+      LC_ALL: en_US.UTF-8
+    links:
+      - redis:redis
+    expose:
+      - 9000
+      - 9572
+    networks:
+      - lnmp
+
+  go:
+    #    build:
+    #      context: ./Go
+    image: 18736050080/mygo:v4
+    container_name: go
+    restart: always
+    depends_on:
+      - mysql
+    ports:
+      - "9888:9888"
+      - "9788:9788"
+      - "22:22"
+    volumes:
+      - ${GOPATH}:/home/golang
+      - ${HOME_DIR}.ssh:/root/ssh_key
+      - ${SSH_KEY}:/root/ssh.sh
+      - ${DOCKER_ENV}${GO_LOGS}:/home/logs
+    working_dir: /home/golang/src
+    environment:
+      LC_ALL: en_US.UTF-8
+    expose:
+      - 9888
+      - 22
+    networks:
+      - lnmp
+
+  nginx.com:
+    image: nginx
+    container_name: ng
+    restart: always
+    depends_on:
+      - php
+      - go
+    volumes:
+      - ${DOCKER_ENV}${WORK_DIR}:/data/www
+      - ${DOCKER_ENV}${NGINX_LOG_DIR}:/var/logs
+      - ${DOCKER_ENV}${NGINX_CONF_DIR}/nginx.conf:/etc/nginx/nginx.conf
+      - ${DOCKER_ENV}${NGINX_CONF_DIR}/conf.d:/etc/nginx/conf.d
+    working_dir: /data/www
+    environment:
+      LC_ALL: en_US.UTF-8
+    ports:
+      - "${HTTP_PORT}:80"
+      - "${HTTPS_PORT}:443"
+    expose:
+      - 443
+      - 80
+    networks:
+      - lnmp
+
+networks:
+  lnmp:
+    driver: bridge
