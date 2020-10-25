@@ -61,6 +61,7 @@ services:
     volumes:
       - ${DEV_ENV}${MYSQL_DATA}:/var/lib/mysql
       - ${DEV_ENV}${MYSQL_CONF}:/etc/mysql/conf.d
+      - ${DEV_ENV}${MYSQLD_CONF}:/etc/mysql/mysql.conf.d
       - ${DEV_ENV}${MYSQL_LOG}:/home/logs
     networks:
       - lnmp
