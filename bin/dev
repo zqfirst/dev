@@ -24,6 +24,10 @@ fi
 BIN_DIR=`DIRNAME $0`
 PRO_DIR=`DIRNAME ${BIN_DIR}`
 
+if [ ! -f "${PRO_DIR}/.env" ]; then
+  cp ${PRO_DIR}/.env.example ${PRO_DIR}/.env
+fi
+
 source ${PRO_DIR}/.env
 
 case "$1" in
