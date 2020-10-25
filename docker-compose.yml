@@ -75,7 +75,7 @@ services:
     volumes:
       - ${DEV_ENV}${REDIS_CONF}:/usr/local/etc/redis/redis.conf
       - ${DEV_ENV}${REDIS_DATA}:/data
-      - ${DEV_ENV}${REDIS_LOGS}:/var/log
+      - ${DEV_ENV}${REDIS_LOGS}:/var/log/redis
       - ${HOME_DIR}.ssh:/root/ssh
     expose:
       - 6379
@@ -94,7 +94,7 @@ services:
       - "${HTTP_SWOOLE_PORT}:9577"
     volumes:
       - ${DEV_ENV}${WORK_DIR}:/data/www
-      - ${DEV_ENV}${PHP_LOG_DIR}:/var/opt/remi/php73/log
+      - ${DEV_ENV}${PHP_LOG_DIR}:/var/opt/remi/php73/log/php-fpm
       - ${DEV_ENV}${PHP_WWW_LOG_DIR}:/home/logs
       - ${HOME_DIR}.ssh:/root/ssh_key
       - ${SSH_KEY}:/root/ssh.sh

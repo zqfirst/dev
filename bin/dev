@@ -28,6 +28,9 @@ if [[ ! -f "${PRO_DIR}/.env" ]] || [[ "$2" == "1" ]]; then
   cp ${PRO_DIR}/.env.example ${PRO_DIR}/.env
 fi
 
+## 镜像下载加速
+curl -sSL https://get.daocloud.io/daotools/set_mirror.sh | sh -s http://f1361db2.m.daocloud.io
+## 加载配置项
 source ${PRO_DIR}/.env
 
 case "$1" in
@@ -41,7 +44,7 @@ case "$1" in
             fi
 
             # 公用主机ssh key
-            container = ( ${Go} ${PHP} )
+            container=( "${Go}" "${PHP}" )
             foreach con in ${container}
                 docker exec -it ${con} /bin/bash -c "sh /root/ssh.sh"
             end
