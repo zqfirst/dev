@@ -76,6 +76,7 @@ services:
       - ${DOCKER_ENV}${REDIS_CONF}:/usr/local/etc/redis/redis.conf
       - ${DOCKER_ENV}${REDIS_DATA}:/data
       - ${DOCKER_ENV}${REDIS_LOGS}:/var/log
+      - ${HOME_DIR}.ssh:/root/ssh
     expose:
       - 6379
     environment:
@@ -87,7 +88,7 @@ services:
     #    build:
     #      context: ./Php
     image: 18736050080/myphp:v4
-    container_name: php
+    container_name: ${Php}
     restart: always
     ports:
       - "${HTTP_SWOOLE_PORT}:9577"
@@ -112,7 +113,7 @@ services:
     #    build:
     #      context: ./Go
     image: 18736050080/mygo:v4
-    container_name: go
+    container_name: ${Go}
     restart: always
     depends_on:
       - mysql

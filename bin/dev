@@ -12,13 +12,6 @@ Usage: ${0##*/} COMMAND
     stop        stop all containers
     restart     restart all container
     status      list all container
-    sw-start    start swoole serve
-    sw-restart  restart swoole serve
-    sw-stop     stop swoole serve
-    rebuild     rebuild all containers from local Dockerfile
-    remove      remove all containers
-    s-nginx     login shell on nginx docker conatainer
-    s-php       login shell on php docker conatainer
 EOF
     exit 0;
 
@@ -42,6 +35,12 @@ case "$1" in
             else
                 sudo -b docker-compose up -d --force-recreate
             fi
+
+            # 公用主机ssh key
+            container := $(Go) $(Php)
+            foreach con in ${container}
+                docker exec -it ${con} /bin/bash -c "sh /root/ssh.sh"
+            end
         ;;
     start)
             sudo docker-compose start
@@ -57,27 +56,6 @@ case "$1" in
         ;;
     status)
             docker-compose ps
-        ;;
-    sw-start)
-            printf "\033[33;49;1m Swoole 服务开启... \033[39;49;0m \n"
-            docker exec -it fend-php /bin/bash -c "php /home/www/fend/Bin/start.php -c /home/www/fend/App/Config/Swoole.php start"
-            printf "\033[32;49;1m Swoole 服务已开启 \033[39;49;0m \n"
-        ;;
-    sw-restart)
-            printf "\033[33;49;1m Swoole 服务重启... \033[39;49;0m \n"
-            docker exec -it fend-php /bin/bash -c "php /home/www/fend/Bin/start.php -c /home/www/fend/App/Config/Swoole.php restart"
-            printf "\033[32;49;1m Swoole 服务已开启 \033[39;49;0m \n"
-        ;;
-    sw-stop)
-            printf "\033[33;49;1m Swoole 服务停止... \033[39;49;0m \n"
-            docker exec -it fend-php /bin/bash -c "php /home/www/fend/Bin/start.php -c /home/www/fend/App/Config/Swoole.php kill"
-            printf "\033[32;49;1m Swoole 服务已停止 \033[39;49;0m \n"
-        ;;
-    s-php)
-            docker exec -it php-fpm /bin/bash
-        ;;
-    s-nginx)
-            docker exec -it ng /bin/bash
         ;;
     rebuild)
         # 启动容器服务
