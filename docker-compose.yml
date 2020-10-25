@@ -88,7 +88,7 @@ services:
     #    build:
     #      context: ./Php
     image: 18736050080/myphp:v4
-    container_name: ${Php}
+    container_name: ${PHP}
     restart: always
     ports:
       - "${HTTP_SWOOLE_PORT}:9577"
