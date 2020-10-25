@@ -75,7 +75,7 @@ services:
     volumes:
       - ${DEV_ENV}${REDIS_CONF}:/usr/local/etc/redis/redis.conf
       - ${DEV_ENV}${REDIS_DATA}:/data
-      - ${DEV_ENV}${REDIS_LOGS}:/var/log/redis
+      - ${DEV_ENV}${REDIS_LOGS}redis/redis.log:/tmp/redis
       - ${HOME_DIR}.ssh:/root/ssh
     expose:
       - 6379
@@ -120,7 +120,6 @@ services:
     ports:
       - "9888:9888"
       - "9788:9788"
-      - "22:22"
     volumes:
 #      - ${GOPATH}:/home/golang
       - ${HOME_DIR}.ssh:/root/ssh_key
@@ -131,7 +130,6 @@ services:
       LC_ALL: en_US.UTF-8
     expose:
       - 9888
-      - 22
     networks:
       - lnmp
 
