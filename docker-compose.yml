@@ -122,7 +122,7 @@ services:
       - "9788:9788"
       - "22:22"
     volumes:
-      - ${GOPATH}:/home/golang
+#      - ${GOPATH}:/home/golang
       - ${HOME_DIR}.ssh:/root/ssh_key
       - ${SSH_KEY}:/root/ssh.sh
       - ${DEV_ENV}${GO_LOGS}:/home/logs

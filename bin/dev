@@ -41,7 +41,7 @@ case "$1" in
             fi
 
             # 公用主机ssh key
-            container := $(Go) $(Php)
+            container = ( ${Go} ${PHP} )
             foreach con in ${container}
                 docker exec -it ${con} /bin/bash -c "sh /root/ssh.sh"
             end
