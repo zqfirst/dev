@@ -33,7 +33,7 @@ BIN_DIR=`dirname $0`
 PRO_DIR=`dirname ${BIN_DIR}`
 
 CURRENT_DIR=`pwd`
-cd PRO_DIR
+cd ${PRO_DIR}
 
 if [[ ! -f "${PRO_DIR}/.env" ]] || [[ "$2" == "1" ]]; then
   cp ${PRO_DIR}/.env.example ${PRO_DIR}/.env
