@@ -6,7 +6,7 @@ nginx/conf/conf.d/*
 nginx/logs/*
 php/logs/*
 redis/data/*
-redis/logs/*
+redis/logs/!redis.log
 mysql/data/*
 mysql/log/*
 go/logs/*
