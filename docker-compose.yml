@@ -75,8 +75,9 @@ services:
     volumes:
       - ${DEV_ENV}${REDIS_CONF}:/usr/local/etc/redis/redis.conf
       - ${DEV_ENV}${REDIS_DATA}:/data
-      - ${DEV_ENV}${REDIS_LOGS}redis/redis.log:/tmp/redis
+      - ${DEV_ENV}${REDIS_LOGS}:/var/log/redis/redis.log
       - ${HOME_DIR}.ssh:/root/ssh
+      - /etc/localtime:/etc/localtime:ro
     expose:
       - 6379
     environment:
