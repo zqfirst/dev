@@ -5,7 +5,6 @@ www/*
 nginx/conf/conf.d/*
 nginx/logs/*
 php/logs/*
-php/logs1/*
 redis/data/*
 redis/logs/*
 mysql/data/*
