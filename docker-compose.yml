@@ -69,7 +69,7 @@ services:
   redis:
     image: redis:5.0
     container_name: redis
-    command: redis-server /usr/local/etc/redis/redis.conf
+    command: redis-server /usr/local/etc/redis/redis.conf --requirepass ${REDIS_PASS}
     restart: always
     ports:
       - "${REDIS_PORT}:6379"
