@@ -57,7 +57,7 @@ services:
       MYSQL_ROOT_PASSWORD: ${MYSQL_PASSWD}
       MYSQL_ROOT_HOST: 172.*.*.*
     ports:
-      - 3306:3306
+      - ${MYSQL_PORT}:3306
     volumes:
       - ${DEV_ENV}${MYSQL_DATA}:/var/lib/mysql
       - ${DEV_ENV}${MYSQL_CONF}:/etc/mysql/conf.d
