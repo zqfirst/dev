@@ -44,6 +44,9 @@ fi
 ## 加载配置项
 source ${PRO_DIR}/.env
 
+##redis log 需要单独赋予权限
+chmod 777 ${REDIS_LOGS}/redis.log
+
 case "$1" in
     init)
             # 启动容器服务
