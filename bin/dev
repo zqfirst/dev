@@ -36,6 +36,11 @@ CURRENT_DIR=`pwd`
 cd ${PRO_DIR}
 
 if [[ ! -f "${PRO_DIR}/.env" ]] || [[ "$2" == "1" ]]; then
+  ### 备份原文件
+  if [[ -f "${PRO_DIR}/.env" ]]; then
+    cp ${PRO_DIR}/.env ${PRO_DIR}/.env.bak
+  fi
+
   cp ${PRO_DIR}/.env.example ${PRO_DIR}/.env
 fi
 
