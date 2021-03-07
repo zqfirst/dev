@@ -113,29 +113,29 @@ services:
     networks:
       - lnmp
 
-  go:
-    #    build:
-    #      context: ./Go
-    image: 18736050080/mygo:v4
-    container_name: ${Go}
-    restart: always
-    depends_on:
-      - mysql
-    ports:
-      - "9888:9888"
-      - "9788:9788"
-    volumes:
-      - ${DEV_ENV}${GO_PATH}:/home/golang/src
-      - ${HOME_DIR}.ssh:/root/ssh_key
-      - ${SSH_KEY}:/root/ssh.sh
-      - ${DEV_ENV}${GO_LOGS}:/home/logs
-    working_dir: /home/golang/src
-    environment:
-      LC_ALL: en_US.UTF-8
-    expose:
-      - 9888
-    networks:
-      - lnmp
+#  go:
+#    #    build:
+#    #      context: ./Go
+#    image: 18736050080/mygo:v4
+#    container_name: ${Go}
+#    restart: always
+#    depends_on:
+#      - mysql
+#    ports:
+#      - "9888:9888"
+#      - "9788:9788"
+#    volumes:
+#      - ${DEV_ENV}${GO_PATH}:/home/golang/src
+#      - ${HOME_DIR}.ssh:/root/ssh_key
+#      - ${SSH_KEY}:/root/ssh.sh
+#      - ${DEV_ENV}${GO_LOGS}:/home/logs
+#    working_dir: /home/golang/src
+#    environment:
+#      LC_ALL: en_US.UTF-8
+#    expose:
+#      - 9888
+#    networks:
+#      - lnmp
 
   nginx.com:
     image: nginx
@@ -143,7 +143,7 @@ services:
     restart: always
     depends_on:
       - php
-      - go
+#      - go
     volumes:
       - ${DEV_ENV}${WORK_DIR}:/data/www
       - ${DEV_ENV}${NGINX_LOG_DIR}:/var/logs
