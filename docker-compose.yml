@@ -3,7 +3,7 @@ version: '3'
 services:
 
   zookeeper:
-    image: confluentinc/cp-zookeeper
+    image: zookeeper:3.6.2
     #    image: wurstmeister/zookeeper
     container_name: zookeeper
     environment:
@@ -89,15 +89,15 @@ services:
       - lnmp
 
   php:
-    #    build:
-    #      context: ./Php
+#    build:
+#      context: ./php
     image: 18736050080/myphp:v4
     container_name: ${PHP}
     restart: always
     ports:
       - "${HTTP_SWOOLE_PORT}:9577"
     volumes:
-      - ${DEV_ENV}${WORK_DIR}:/data/www
+      - ${PHP_WORK_DIR}:/data/www
       - ${DEV_ENV}${PHP_LOG_DIR}:/var/opt/remi/php73/log/php-fpm
       - ${DEV_ENV}${PHP_WWW_LOG_DIR}:/home/logs
       - ${HOME_DIR}.ssh:/root/ssh_key
@@ -143,9 +143,9 @@ services:
     restart: always
     depends_on:
       - php
-      - go
+#      - go
     volumes:
-      - ${DEV_ENV}${WORK_DIR}:/data/www
+      - ${PHP_WORK_DIR}:/data/www
       - ${DEV_ENV}${NGINX_LOG_DIR}:/var/logs
       - ${DEV_ENV}${NGINX_CONF_DIR}/nginx.conf:/etc/nginx/nginx.conf
       - ${DEV_ENV}${NGINX_CONF_DIR}/conf.d:/etc/nginx/conf.d
