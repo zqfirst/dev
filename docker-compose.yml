@@ -30,43 +30,43 @@ services:
     networks:
       - lnmp
 
-  es:
-    image: elasticsearch:6.4.3
-    container_name: es
-    environment:
-      LC_ALL: en_US.UTF-8
-    ports:
-      - 9200:9200
-      - 9300:9300
-    networks:
-      - lnmp
+#  es:
+#    image: elasticsearch:6.4.3
+#    container_name: es
+#    environment:
+#      LC_ALL: en_US.UTF-8
+#    ports:
+#      - 9200:9200
+#      - 9300:9300
+#    networks:
+#      - lnmp
 
-  mysql:
-    image: mysql:5.7
-    container_name: mysql
-    restart: always
-    command:
-      --character-set-server=utf8mb4
-      --collation-server=utf8mb4_general_ci
-      --explicit_defaults_for_timestamp=true
-      --lower_case_table_names=1
-      --max_allowed_packet=128M
-      --skip-name-resolve
-      --skip-host-cache
-      --sql-mode="STRICT_TRANS_TABLES,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION,NO_ZERO_DATE,NO_ZERO_IN_DATE,ERROR_FOR_DIVISION_BY_ZERO"
-    environment:
-      TZ: Asia/Shanghai
-      MYSQL_ROOT_PASSWORD: ${MYSQL_PASSWD}
-      MYSQL_ROOT_HOST: 172.*.*.*
-    ports:
-      - ${MYSQL_PORT}:3306
-    volumes:
-      - ${DEV_ENV}${MYSQL_DATA}:/var/lib/mysql
-      - ${DEV_ENV}${MYSQL_CONF}:/etc/mysql/conf.d
-      - ${DEV_ENV}${MYSQLD_CONF}:/etc/mysql/mysql.conf.d
-      - ${DEV_ENV}${MYSQL_LOG}:/home/logs
-    networks:
-      - lnmp
+#  mysql:
+#    image: mysql:5.7
+#    container_name: mysql
+#    restart: always
+#    command:
+#      --character-set-server=utf8mb4
+#      --collation-server=utf8mb4_general_ci
+#      --explicit_defaults_for_timestamp=true
+#      --lower_case_table_names=1
+#      --max_allowed_packet=128M
+#      --skip-name-resolve
+#      --skip-host-cache
+#      --sql-mode="STRICT_TRANS_TABLES,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION,NO_ZERO_DATE,NO_ZERO_IN_DATE,ERROR_FOR_DIVISION_BY_ZERO"
+#    environment:
+#      TZ: Asia/Shanghai
+#      MYSQL_ROOT_PASSWORD: ${MYSQL_PASSWD}
+#      MYSQL_ROOT_HOST: 172.*.*.*
+#    ports:
+#      - ${MYSQL_PORT}:3306
+#    volumes:
+#      - ${DEV_ENV}${MYSQL_DATA}:/var/lib/mysql
+#      - ${DEV_ENV}${MYSQL_CONF}:/etc/mysql/conf.d
+#      - ${DEV_ENV}${MYSQLD_CONF}:/etc/mysql/mysql.conf.d
+#      - ${DEV_ENV}${MYSQL_LOG}:/home/logs
+#    networks:
+#      - lnmp
 
   redis:
     image: redis:5.0
@@ -97,7 +97,7 @@ services:
     ports:
       - "${HTTP_SWOOLE_PORT}:9577"
     volumes:
-      - ${PHP_WORK_DIR}:/data/www
+      - ${DEV_ENV}${PHP_WORK_DIR}:/data/www
       - ${DEV_ENV}${PHP_LOG_DIR}:/var/opt/remi/php73/log/php-fpm
       - ${DEV_ENV}${PHP_WWW_LOG_DIR}:/home/logs
       - ${HOME_DIR}.ssh:/root/ssh_key
@@ -119,8 +119,8 @@ services:
     image: 18736050080/mygo:v4
     container_name: ${Go}
     restart: always
-    depends_on:
-      - mysql
+#    depends_on:
+#      - mysql
     ports:
       - "9888:9888"
       - "9788:9788"
@@ -145,7 +145,7 @@ services:
       - php
 #      - go
     volumes:
-      - ${PHP_WORK_DIR}:/data/www
+      - ${DEV_ENV}${PHP_WORK_DIR}:/data/www
       - ${DEV_ENV}${NGINX_LOG_DIR}:/var/logs
       - ${DEV_ENV}${NGINX_CONF_DIR}/nginx.conf:/etc/nginx/nginx.conf
       - ${DEV_ENV}${NGINX_CONF_DIR}/conf.d:/etc/nginx/conf.d
